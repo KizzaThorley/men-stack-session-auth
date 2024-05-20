@@ -42,5 +42,35 @@ res.send(`thanks for signing up ${user.username}`);
 
 });
 
+router.get('/sign-in', (req, res) => {
+    res.render('auth/sign-in.ejs');
+})
+
+router.post('/sign-in', async (req, res) => {
+    const userInDatabase = await User.findOne({ username: req.body.username });
+    // if the user doesnt exist send them a generic failur message 
+    if (!userInDatabase) {
+        return res.send("Login failed, Please try again.")
+    } 
+    // the user exists in our db lets check thier password against the input 
+  
+    const validPassword = bcrypt.compareSync(req.body.password, userInDatabase.password);
+    if (!validPassword) {
+        return res.send("Login failed, Please try again.");
+    }
+
+    req.session.user = {
+        username: userInDatabase.username,
+    };
+
+    res.redirect('/')
+    
+});
+
+router.get('/sign-out', (req, res) => {
+    req.session.destroy();
+    res.redirect('/')
+})
+
 module.exports = router;
 

@@ -6,7 +6,17 @@
     <title>Authentication</title>
 </head>
 <body>
-    <h1>Welcome to the app!</h1>
+    <%- include('./partials/nav') %>
+    <% if (user) { %>
+    <h1>Welcome to the app, <%=user.username %>!</h1>
+    <a href="/auth/sign-out">Sign Out</a>
+    <% } else { %>
+        <h1>Welcom to the app, guest.</h1>
+        <p>
     <a href="/auth/sign-up">Sign Up</a>
+    <a href="/auth/sign-in">Sign In</a>
+    </p>
+    <% } %>
+    <p><a href="/vip-lounge">Get into the VIP Users Only lounge</a></p>
 </body>
 </html>
